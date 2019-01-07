@@ -2,6 +2,7 @@ package com.example.qiaop.xiangmu_zhihu.fragment.GankFragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.activity.TechDetailActivity;
 import com.example.qiaop.xiangmu_zhihu.adapter.GankAdapter;
 import com.example.qiaop.xiangmu_zhihu.base.fragment.BaseFragment;
 import com.example.qiaop.xiangmu_zhihu.beans.GankListBean;
@@ -88,7 +90,16 @@ public class Gank_AFragment extends BaseFragment<GankView, GankPresenter<GankVie
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(manager);
         rv.setAdapter(gankAdapter);
-
+        gankAdapter.setClickList(new GankAdapter.OnClickList() {
+            @Override
+            public void Click(String url,String desc) {
+                Intent intent = new Intent(getContext(),TechDetailActivity.class);
+                intent.putExtra("name","来自干货集中营_Android");
+                intent.putExtra("url",url);
+                intent.putExtra("title",desc);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

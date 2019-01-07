@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.beans.DailyListBean;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaoBiaoshi;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 
 import java.util.List;
 
@@ -56,6 +58,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         context = parent.getContext();
         if (viewType == 0){
             zhiHuPageAdapter = new ZhiHuPageAdapter(list2,context);
+
             View view0 = LayoutInflater.from(context).inflate(R.layout.item_zhihua,parent,false);
             ViewHolder0 viewHolder0 = new ViewHolder0(view0);
             return viewHolder0;
@@ -88,7 +91,14 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
             ((ViewHolder2) holder).tv.setText(list.get(contentPosition).getTitle());
-            Glide.with(context).load(list.get(position).getImages().get(0)).into(((ViewHolder2) holder).img);
+            List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+            boolean isNoimage = identification.get(0).getIsNoimage();
+            if (isNoimage){
+                ((ViewHolder2) holder).img.setImageResource(R.mipmap.start_geek);
+            }else {
+                Glide.with(context).load(list.get(position).getImages().get(0)).into(((ViewHolder2) holder).img);
+            }
+
         }else if (holder instanceof ViewHolder1){
             ((ViewHolder1) holder).tv_daily_date.setText(tv_name);
         }else {

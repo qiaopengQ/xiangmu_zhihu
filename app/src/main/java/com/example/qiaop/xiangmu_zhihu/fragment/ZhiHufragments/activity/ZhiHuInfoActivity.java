@@ -15,13 +15,16 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.base.activity.BaseActivity;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaocollect;
 import com.example.qiaop.xiangmu_zhihu.beans.ZhihuDetailBean;
 import com.example.qiaop.xiangmu_zhihu.http.zhihu.ZhiHuRetrofit;
 import com.example.qiaop.xiangmu_zhihu.presenter.ZhiHuPresenter;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbcollectUtils;
 import com.example.qiaop.xiangmu_zhihu.view.ZhiHuView;
 import com.google.gson.Gson;
 
@@ -30,6 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,18 +68,24 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
     private boolean isBottonShow = true;
     String mimeType = "text/html";
     String enCoding = "utf-8";
+    private String title;
+    private String image;
+    private int data;
 
     @Override
     protected void initData() {
 
         Intent intent = getIntent();
-        int data = intent.getIntExtra("data", 0);
-        Log.e("123", "" + data);
+        data = intent.getIntExtra("data", 0);
         //Log.e("ZhiHuInfoActivity", newsid);
         HashMap<String, Object> map = new HashMap<>();
         map.put("newsid", data);
         presenter.getDailyListBean(ZhiHuRetrofit.NEWSIDINFO, map);
-
+        List<GreenDaocollect> select = MyDbcollectUtils.getInstance().select(data);
+        for (int i = 0; i < select.size(); i++) {
+            boolean isCollect = select.get(i).getIsCollect();
+            fabLike.setSelected(isCollect);
+        }
 //        setSupportActionBar(toolbar_datainfo);
         //  EventBus.getDefault().register(this);
         FloatingActionButton fab_like = (FloatingActionButton) findViewById(R.id.fab_like);
@@ -86,9 +96,12 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
                         .setAction("Action", null).show();*/
                 if (fabLike.isSelected()) {
                     fabLike.setSelected(false);
+                    Toast.makeText(ZhiHuInfoActivity.this, "取消", Toast.LENGTH_SHORT).show();
                     //mPresenter.deleteLikeData();
                 } else {
                     fabLike.setSelected(true);
+                    MyDbcollectUtils.getInstance().insert(new GreenDaocollect(null,title,data+"",image,"来自知乎",data,true));
+                    Toast.makeText(ZhiHuInfoActivity.this, "收藏", Toast.LENGTH_SHORT).show();
                     //mPresenter.insertLikeData();
                 }
             }
@@ -140,8 +153,8 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
                 Log.e("qwer", s);
                 ZhihuDetailBean zhihuDetailBean = new Gson().fromJson(s, ZhihuDetailBean.class);
                 String body = zhihuDetailBean.getBody();
-                String title = zhihuDetailBean.getTitle();
-                String image = zhihuDetailBean.getImage();
+                title = zhihuDetailBean.getTitle();
+                image = zhihuDetailBean.getImage();
                 setToolBar(toolbarDatainfo, title);
                 Glide.with(this).load(image).into(detailBarImage);
                 //web_spanned.loadDataWithBaseURL(null, body, mimeType, enCoding, null);
@@ -195,8 +208,11 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
                     @Override
                     public void run() {
                         //toolbarDatainfo.setTitle(spanned);
-                        tvSpanned.setText(spanned);
-                        Log.e("spanned", "spanned:" + spanned);
+                        if (spanned!=null){
+                            tvSpanned.setText(spanned);
+                        }
+
+                        //Log.e("spanned", "spanned:" + spanned);
                     }
                 });
             }

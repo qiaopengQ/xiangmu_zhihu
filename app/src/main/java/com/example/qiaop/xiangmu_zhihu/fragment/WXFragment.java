@@ -1,6 +1,7 @@
 package com.example.qiaop.xiangmu_zhihu.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.qiaop.xiangmu_zhihu.MainActivity;
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.activity.TechDetailActivity;
 import com.example.qiaop.xiangmu_zhihu.adapter.WecharAdapter;
 import com.example.qiaop.xiangmu_zhihu.base.fragment.BaseFragment;
 import com.example.qiaop.xiangmu_zhihu.beans.WecharListBean;
@@ -39,6 +41,7 @@ import butterknife.Unbinder;
 public class WXFragment extends BaseFragment<WecharView, WecharPresenter<WecharView>> implements WecharView<String> {
 
     @BindView(R.id.rv)
+
     RecyclerView rv;
     @BindView(R.id.smart)
     SmartRefreshLayout smart;
@@ -59,6 +62,18 @@ public class WXFragment extends BaseFragment<WecharView, WecharPresenter<WecharV
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(manager);
         rv.setAdapter(wecharAdapter);
+        wecharAdapter.setClickwechar(new WecharAdapter.OnClickwechar() {
+            @Override
+            public void Click(String url,String title,String image) {
+                //Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), TechDetailActivity.class);
+                intent.putExtra("name","微信精选");
+                intent.putExtra("url",url);
+                intent.putExtra("title",title);
+                intent.putExtra("image",image);
+                startActivity(intent);
+            }
+        });
         if (a) {
             map.put("key", "52b7ec3471ac3bec6846577e79f20e4c");
             map.put("num", "10");

@@ -2,6 +2,7 @@ package com.example.qiaop.xiangmu_zhihu.fragment.GankFragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.activity.GankflActivity;
+import com.example.qiaop.xiangmu_zhihu.activity.TechDetailActivity;
 import com.example.qiaop.xiangmu_zhihu.adapter.GirlAdapter;
 import com.example.qiaop.xiangmu_zhihu.base.fragment.BaseFragment;
 import com.example.qiaop.xiangmu_zhihu.beans.GankListBean;
@@ -66,6 +69,14 @@ public class Gank_DFragment extends BaseFragment<GankView, GankPresenter<GankVie
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rv.setLayoutManager(staggeredGridLayoutManager);
         rv.setAdapter(girlAdapter);
+        girlAdapter.setOnClickList(new GirlAdapter.OnClickList() {
+            @Override
+            public void Click(String url) {
+                Intent intent = new Intent(getContext(),GankflActivity.class);
+                intent.putExtra("url",url);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -165,8 +165,8 @@ public class ZhiHu_AFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
                 recycleAdapter.addDailyList(dailyListBean);
                 break;
         }
-        smart.setEnableLoadMore(false);
-        smart.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
+        //smart.setEnableLoadMore(false);
+        /*smart.setOnRefreshLoadMoreListener(new OnRefreshLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 smart.finishLoadMore();
@@ -174,13 +174,13 @@ public class ZhiHu_AFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                /*data.clear();
-                data.addAll(stories);*/
+                *//*data.clear();
+                data.addAll(stories);*//*
                 //recycleAdapter.notifyDataSetChanged();
                 //presenter.getDailyListBean(ZhiHuRetrofit.LATEST, null);
                 smart.finishRefresh();
             }
-        });
+        });*/
         recycleAdapter.setOnclickLienet(new RecycleAdapter.OnclickLienet() {
             @Override
             public void Click(String ga_prefix, int position) {
@@ -196,7 +196,7 @@ public class ZhiHu_AFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
 
     @OnClick(R.id.fab_calender)
     public void onViewClicked() {
-        //copyToClipboard(getContext(),"李涛");
+        //copyToClipboard(getContext(),"qqq");
         Intent intent = new Intent();
         intent.setClass(getContext(), ZhiHuActivity.class);
         CircularAnimUtil.startActivity(getActivity(), intent, fabCalender, R.color.fab_bg);

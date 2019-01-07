@@ -55,7 +55,7 @@ public interface ZHihuServer {
      * 专栏日报详情SectionChildListBean
      */
     @GET("section/{id}")
-    Observable<String> getSectionChildList(@Path("id") String id);
+    Observable<String> getSectionChildList(@Path("id") int id);
 
     /**
      * 热门日报HotListBean

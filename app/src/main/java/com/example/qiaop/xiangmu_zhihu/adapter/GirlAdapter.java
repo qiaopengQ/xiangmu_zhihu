@@ -42,7 +42,7 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         /*//存在记录的高度时先Layout再异步加载图片
         if (mList.get(holder.getAdapterPosition()).getHeight() > 0) {
             ViewGroup.LayoutParams layoutParams = holder.ivGirl.getLayoutParams();
@@ -50,6 +50,12 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlAdapter.ViewHolder>{
         }*/
 
         Glide.with(context).load(mList.get(position).getUrl()).into(holder.ivGirl);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickList.Click(mList.get(position).getUrl());
+            }
+        });
     }
 
     @Override
@@ -66,5 +72,14 @@ public class GirlAdapter extends RecyclerView.Adapter<GirlAdapter.ViewHolder>{
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+    OnClickList onClickList;
+
+    public void setOnClickList(OnClickList onClickList) {
+        this.onClickList = onClickList;
+    }
+
+    public interface OnClickList{
+        void Click(String url);
     }
 }

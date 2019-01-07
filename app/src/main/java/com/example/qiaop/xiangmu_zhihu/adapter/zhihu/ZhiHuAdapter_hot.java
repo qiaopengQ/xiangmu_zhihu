@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaoBiaoshi;
 import com.example.qiaop.xiangmu_zhihu.beans.HotListBean;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 
 import java.util.List;
 
@@ -34,9 +36,21 @@ public class ZhiHuAdapter_hot extends RecyclerView.Adapter<ZhiHuAdapter_hot.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.tv.setText(hot.get(position).getTitle());
-        Glide.with(context).load(hot.get(position).getThumbnail()).into(holder.img);
+        List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+        boolean isNoimage = identification.get(0).getIsNoimage();
+        if (isNoimage){
+            holder.img.setImageResource(R.mipmap.start_geek);
+        }else {
+            Glide.with(context).load(hot.get(position).getThumbnail()).into(holder.img);
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickList.Click(hot.get(position).getNews_id(),position);
+            }
+        });
     }
 
     @Override
@@ -54,5 +68,14 @@ public class ZhiHuAdapter_hot extends RecyclerView.Adapter<ZhiHuAdapter_hot.View
             img = itemView.findViewById(R.id.img);
             tv = itemView.findViewById(R.id.tv);
         }
+    }
+    ClickList clickList;
+
+    public void setClickList(ClickList clickList) {
+        this.clickList = clickList;
+    }
+
+    public interface ClickList{
+        void Click(int id,int position);
     }
 }

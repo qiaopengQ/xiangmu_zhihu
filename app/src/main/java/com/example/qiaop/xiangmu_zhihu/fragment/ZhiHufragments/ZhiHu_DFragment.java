@@ -1,6 +1,7 @@
 package com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.adapter.zhihu.ZhiHuAdapter_hot;
 import com.example.qiaop.xiangmu_zhihu.base.fragment.BaseFragment;
 import com.example.qiaop.xiangmu_zhihu.beans.HotListBean;
+import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.activity.ZhiHuInfoActivity;
 import com.example.qiaop.xiangmu_zhihu.http.zhihu.ZhiHuRetrofit;
 import com.example.qiaop.xiangmu_zhihu.presenter.ZhiHuPresenter;
 import com.example.qiaop.xiangmu_zhihu.view.ZhiHuView;
@@ -30,7 +32,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ZhiHu_DFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiHuView>> implements ZhiHuView<String> {
+public class ZhiHu_DFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiHuView>> implements ZhiHuView<String>,ZhiHuAdapter_hot.ClickList {
 
     @BindView(R.id.rv)
     RecyclerView rv;
@@ -57,6 +59,7 @@ public class ZhiHu_DFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         rv.setLayoutManager(manager);
         rv.setAdapter(zhiHuAdapter_hot);
+        zhiHuAdapter_hot.setClickList(this);
     }
 
     @Override
@@ -101,5 +104,12 @@ public class ZhiHu_DFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @Override
+    public void Click(int id, int position) {
+        Intent intent = new Intent(getContext(),ZhiHuInfoActivity.class);
+        intent.putExtra("data",hot.get(position).getNews_id());
+        startActivity(intent);
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.adapter.zhihu.RecycleAdapter;
 import com.example.qiaop.xiangmu_zhihu.beans.GankListBean;
 
 import java.util.List;
@@ -32,10 +33,16 @@ public class GankAdapter_IOS extends RecyclerView.Adapter<GankAdapter_IOS.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GankAdapter_IOS.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GankAdapter_IOS.ViewHolder holder, final int position) {
         holder.tv_desc.setText(list.get(position).getDesc());
         holder.tv_who.setText(list.get(position).getWho());
         holder.tv_time.setText(list.get(position).getPublishedAt());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickList.Click(list.get(position).getUrl(),list.get(position).getDesc());
+            }
+        });
     }
 
     @Override
@@ -56,4 +63,16 @@ public class GankAdapter_IOS extends RecyclerView.Adapter<GankAdapter_IOS.ViewHo
             tv_time = itemView.findViewById(R.id.tv_time);
         }
     }
+
+
+    OnClickList onClickList;
+
+    public void setOnClickList(OnClickList onClickList) {
+        this.onClickList = onClickList;
+    }
+
+    public interface OnClickList{
+        void Click(String url,String desc);
+    }
+
 }

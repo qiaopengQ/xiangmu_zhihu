@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaoBiaoshi;
 import com.example.qiaop.xiangmu_zhihu.beans.SectionListBean;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 
 import java.util.List;
 
@@ -34,10 +36,22 @@ public class ZhiHuAdapter extends RecyclerView.Adapter<ZhiHuAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context).load(data.get(position).getThumbnail()).into(holder.img);
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+        boolean isNoimage = identification.get(0).getIsNoimage();
+        if (isNoimage){
+            holder.img.setImageResource(R.mipmap.start_geek);
+        }else {
+            Glide.with(context).load(data.get(position).getThumbnail()).into(holder.img);
+        }
         holder.tv1.setText(data.get(position).getName());
         holder.tv2.setText(data.get(position).getDescription());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.Click(data.get(position).getName(),data.get(position).getId(),position);
+            }
+        });
     }
 
     @Override
@@ -57,5 +71,14 @@ public class ZhiHuAdapter extends RecyclerView.Adapter<ZhiHuAdapter.ViewHolder>{
             tv1 = itemView.findViewById(R.id.tv1);
             tv2 = itemView.findViewById(R.id.tv2);
         }
+    }
+    ClickListener clickListener;
+
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
+    public interface ClickListener{
+        void Click(String title,int id,int position);
     }
 }

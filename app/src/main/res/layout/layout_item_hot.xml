@@ -34,7 +34,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="3dp"
-                android:textColor="#2C2C2C"
+                android:textColor="@color/colorText"
                 android:textSize="16sp" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

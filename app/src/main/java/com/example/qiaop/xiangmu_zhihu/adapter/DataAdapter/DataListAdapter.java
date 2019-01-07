@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.beans.DataListBean;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaoBiaoshi;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 
 import java.util.List;
 
@@ -41,7 +43,13 @@ public class DataListAdapter extends RecyclerView.Adapter<DataListAdapter.ViewHo
         viewHolder.tv_dataname.setText(newsListBeans.get(i).getTitle());
         viewHolder.tv_datatime.setText(newsListBeans.get(i).getPublishTime());
         viewHolder.tv_source.setText(newsListBeans.get(i).getSource());
-        Glide.with(context).load(newsListBeans.get(i).getNewsImg()).into(viewHolder.img_data);
+        List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+        boolean isNoimage = identification.get(0).getIsNoimage();
+        if (isNoimage){
+            viewHolder.img_data.setImageResource(R.mipmap.start_geek);
+        }else {
+            Glide.with(context).load(newsListBeans.get(i).getNewsImg()).into(viewHolder.img_data);
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.adapter.DataAdapter.DataListAdapter;
@@ -39,12 +40,16 @@ public class DataSFragment extends BaseFragment<DataView, DataPresenter<DataView
     @BindView(R.id.smart)
     SmartRefreshLayout smart;
     Unbinder unbinder;
-    private String category;
+    private String category = null;
     private List<DataListBean.RESULTBean.NewsListBean> news = new ArrayList<>();
     private DataListAdapter dataListAdapter;
 
     public DataSFragment(String s) {
-        category = s;
+        if (s !=null){
+            category = s;
+        }
+
+        //Toast.makeText(getContext(), category, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -58,6 +63,7 @@ public class DataSFragment extends BaseFragment<DataView, DataPresenter<DataView
         HashMap<String, Object> map = new HashMap<>();
         map.put("appKey", "7da0648ea9a84f32bc1649f26d2db42e");
         map.put("category", category);
+        Log.e("categoryfragment", category);
         presenter.getDataList(map, DataRetri.LIST);
     }
 

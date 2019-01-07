@@ -1,6 +1,7 @@
 package com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.adapter.zhihu.ZhiHuAdapter;
 import com.example.qiaop.xiangmu_zhihu.base.fragment.BaseFragment;
 import com.example.qiaop.xiangmu_zhihu.beans.SectionListBean;
+import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.activity.ZhiHuInfoActivity;
+import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.activity.ZhiHuInfoCActivity;
 import com.example.qiaop.xiangmu_zhihu.http.zhihu.ZhiHuRetrofit;
 import com.example.qiaop.xiangmu_zhihu.presenter.ZhiHuPresenter;
 import com.example.qiaop.xiangmu_zhihu.view.ZhiHuView;
@@ -33,7 +36,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ZhiHu_CFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiHuView>> implements ZhiHuView<String> {
+public class ZhiHu_CFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiHuView>> implements ZhiHuView<String>,ZhiHuAdapter.ClickListener {
 
     Unbinder unbinder;
     @BindView(R.id.rv)
@@ -61,7 +64,7 @@ public class ZhiHu_CFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rv.setLayoutManager(staggeredGridLayoutManager);
         rv.setAdapter(zhiHuAdapter);
-
+        zhiHuAdapter.setClickListener(this);
     }
 
 
@@ -117,5 +120,13 @@ public class ZhiHu_CFragment extends BaseFragment<ZhiHuView, ZhiHuPresenter<ZhiH
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder1 = ButterKnife.bind(this, rootView);
         return rootView;
+    }
+
+    @Override
+    public void Click(String title,int id, int position) {
+        Intent intent = new Intent(getContext(),ZhiHuInfoCActivity.class);
+        intent.putExtra("id",sectionList.get(position).getId());
+        intent.putExtra("name",sectionList.get(position).getName());
+        startActivity(intent);
     }
 }

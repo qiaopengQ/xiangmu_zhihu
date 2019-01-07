@@ -32,10 +32,16 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.tv_desc.setText(list.get(position).getDesc());
         holder.tv_who.setText(list.get(position).getWho());
         holder.tv_time.setText(list.get(position).getPublishedAt());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickList.Click(list.get(position).getUrl(),list.get(position).getDesc());
+            }
+        });
     }
 
     @Override
@@ -55,5 +61,14 @@ public class GankAdapter extends RecyclerView.Adapter<GankAdapter.ViewHolder>{
             tv_who = itemView.findViewById(R.id.tv_who);
             tv_time = itemView.findViewById(R.id.tv_time);
         }
+    }
+    OnClickList clickList;
+
+    public void setClickList(OnClickList clickList) {
+        this.clickList = clickList;
+    }
+
+    public interface OnClickList{
+        void Click(String url,String desc);
     }
 }

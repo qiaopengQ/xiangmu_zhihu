@@ -27,7 +27,7 @@ public abstract class BaseObserver<T> implements Observer<T>{
 
     @Override
     public void onError(Throwable e) {
-        Log.e("liangxq",e.getMessage());
+        //Log.e("liangxq",e.getMessage());
         if (compositeDisposable !=null){
             compositeDisposable.clear();
         }

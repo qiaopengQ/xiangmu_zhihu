@@ -1,5 +1,6 @@
 package com.example.qiaop.xiangmu_zhihu;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,10 +9,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaoBiaoshi;
 import com.example.qiaop.xiangmu_zhihu.fragment.CollectFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.datafragments.DataFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.GankFragments.GankFragment;
@@ -20,7 +25,12 @@ import com.example.qiaop.xiangmu_zhihu.fragment.VtexFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.WXFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.ZhiHuFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.imfragment.IMFragment;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
+import java.util.List;
+
+import static com.example.qiaop.xiangmu_zhihu.R.drawable.back;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +38,10 @@ public class MainActivity extends AppCompatActivity
     private MenuItem searchMenuItem;
     public static MaterialSearchView view_search;
     private Toolbar toolbar;
+    private boolean isCache =false;
+    private boolean isNoimage =false;
+    private boolean isNight =false;
+    public static AppCompatDelegate mDelegate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +51,20 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //fragment
+        //设置标识存入数据库
+        MyDbBiaoshiUtils.getInstance().insert(new GreenDaoBiaoshi(null,isCache,isNoimage, this.isNight));
 
+        NavigationView nav_view = findViewById(R.id.nav_view);
+        View headerView = nav_view.getHeaderView(0);
+        LinearLayout linear_nav = headerView.findViewById(R.id.linear_nav);
 
+        List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+        boolean isNight = identification.get(0).getIsNight();
+        if (isNight){
+            linear_nav.setBackgroundResource(R.mipmap.bg_drawer);
+        }else {
+            linear_nav.setBackgroundResource(R.drawable.back);
+        }
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +177,10 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.drawer_setting){
             toolbar.setTitle("设置");
             fragmentTransaction.replace(R.id.fl_content,new SettingFragment());
+            /*List<GreenDaoBiaoshi> identification = MyDbBiaoshiUtils.getInstance().identification();
+            boolean isNight = identification.get(0).getIsNight();*/
+            mDelegate = getDelegate();
+
             searchMenuItem.setVisible(false);
         }else if (id == R.id.drawer_IM){
             toolbar.setTitle("即时通讯");

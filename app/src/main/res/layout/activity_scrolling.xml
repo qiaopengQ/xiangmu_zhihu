@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_spanned"
                 android:layout_margin="@dimen/text_margin"
-                android:text="@string/large_text" />
+                />
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
     <FrameLayout

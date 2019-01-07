@@ -18,9 +18,12 @@ import com.example.qiaop.xiangmu_zhihu.adapter.DataAdapter.DataAdapter;
 import com.example.qiaop.xiangmu_zhihu.adapter.DataAdapter.DefaultItemTouchHelpCallback;
 import com.example.qiaop.xiangmu_zhihu.adapter.DataAdapter.DefaultItemTouchHelper;
 import com.example.qiaop.xiangmu_zhihu.base.activity.SimpleActivity;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.Greendaolistbeans;
+import com.example.qiaop.xiangmu_zhihu.utils.MyDbUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,14 +36,19 @@ public class DataActivity extends SimpleActivity {
     FrameLayout toolbarContainer;
     @BindView(R.id.rv)
     RecyclerView rv;
-    private ArrayList<String> category;
+    private List<String> category = new ArrayList<>();
     private DataAdapter dataAdapter;
+    private Intent intent;
+    private List<Greendaolistbeans> select;
 
     @Override
     protected void initData() {
+        intent = getIntent();
         setToolBar(toolbar, "首页特别展示");
-        Intent intent = getIntent();
-        category = intent.getStringArrayListExtra("category");
+        select = MyDbUtils.getInstance().select();
+        for (int i = 0; i < select.size(); i++) {
+            category.add(select.get(i).getName());
+        }
         Log.e("DataActivity", "category:" + category);
         dataAdapter = new DataAdapter(category,this);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -66,8 +74,14 @@ public class DataActivity extends SimpleActivity {
         @Override
         public boolean Onmove(int adapterPosition, int adapterPosition1) {
             if (category !=null){
+                Log.e("拖拽下标", "adapterPosition+adapterPosition1:" + adapterPosition +"------"+ adapterPosition1);
                 Collections.swap(category,adapterPosition,adapterPosition1);
                 dataAdapter.notifyItemMoved(adapterPosition,adapterPosition1);
+                /*List<Greendaolistbeans> select = MyDbUtils.getInstance().select();
+                Greendaolistbeans greendaolistbeans = select.get(adapterPosition);
+                greendaolistbeans.setId((long) adapterPosition1);
+                MyDbUtils.getInstance().update(greendaolistbeans);
+                Log.e("拖拽后的数据库查询", "MyDbUtils.getInstance().select():" + MyDbUtils.getInstance().select());*/
                 return true;
             }
             return false;
@@ -76,6 +90,7 @@ public class DataActivity extends SimpleActivity {
         @Override
     public void onBackPressed() {
         //Toolbar回退按钮
+            setResult(1000,intent);
         super.onBackPressed();
         Toast.makeText(this, "回退按钮", Toast.LENGTH_SHORT).show();
     }

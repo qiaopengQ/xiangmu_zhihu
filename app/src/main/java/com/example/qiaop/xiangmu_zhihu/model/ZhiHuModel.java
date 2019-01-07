@@ -50,6 +50,14 @@ public class ZhiHuModel{
                 });
                 break;
             case SECTIONSINFO:
+                int id = (int) map.get("id");
+                ZhihuManager.getzHihuServer().getSectionChildList(id).compose(RxUtils.<String>rxObserbaleSchedulerHelper()).subscribe(new BaseObserver<String>(zhiHuCallback) {
+                    @Override
+                    public void onNext(String value) {
+                        //  Log.e("liangxq",value.toString());
+                        zhiHuCallback.setDailyListBean(value,ZhiHuRetrofit.SECTIONS);
+                    }
+                });
                 //专栏详情
                 break;
             case HOT:
