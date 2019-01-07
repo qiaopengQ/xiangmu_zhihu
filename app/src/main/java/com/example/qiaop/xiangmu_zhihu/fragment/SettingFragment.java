@@ -131,7 +131,6 @@ public class SettingFragment extends SimpleFragment implements CompoundButton.On
                     MyDbBiaoshiUtils.getInstance().update(new GreenDaoBiaoshi((long) 1, isCache, isNoimage, isnig));
                 }
                 break;
-
         }
     }
 }
