@@ -77,11 +77,6 @@ public class DataActivity extends SimpleActivity {
                 Log.e("拖拽下标", "adapterPosition+adapterPosition1:" + adapterPosition +"------"+ adapterPosition1);
                 Collections.swap(category,adapterPosition,adapterPosition1);
                 dataAdapter.notifyItemMoved(adapterPosition,adapterPosition1);
-                /*List<Greendaolistbeans> select = MyDbUtils.getInstance().select();
-                Greendaolistbeans greendaolistbeans = select.get(adapterPosition);
-                greendaolistbeans.setId((long) adapterPosition1);
-                MyDbUtils.getInstance().update(greendaolistbeans);
-                Log.e("拖拽后的数据库查询", "MyDbUtils.getInstance().select():" + MyDbUtils.getInstance().select());*/
                 return true;
             }
             return false;

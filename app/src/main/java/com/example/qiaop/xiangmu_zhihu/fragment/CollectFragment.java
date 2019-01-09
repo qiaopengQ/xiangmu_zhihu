@@ -22,6 +22,10 @@ import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.activity.ZhiHuInf
 import com.example.qiaop.xiangmu_zhihu.utils.MyDbcollectUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +59,7 @@ public class CollectFragment extends SimpleFragment {
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
         likeAdapter = new LikeAdapter(seletlist,getContext());
         rvLike.setLayoutManager(new LinearLayoutManager(getContext()));
         rvLike.setAdapter(likeAdapter);
@@ -76,6 +81,7 @@ public class CollectFragment extends SimpleFragment {
                 }else if (seletlist.get(position).getName().equals("来自微信精选")){
                     Intent intent = new Intent(getContext(), TechDetailActivity.class);
                     intent.putExtra("url",url);
+                    intent.putExtra("name","来自微信精选");
                     intent.putExtra("title",title);
                     intent.putExtra("image",image);
                     startActivity(intent);
@@ -101,6 +107,20 @@ public class CollectFragment extends SimpleFragment {
             }
         });
         Log.e("CollectFragment", "select:" + select);
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void getDelete(String s){
+        if (s.equals("取消收藏")){
+            List<GreenDaocollect> select = MyDbcollectUtils.getInstance().select();
+            seletlist.clear();
+            seletlist.addAll(select);
+            likeAdapter.notifyDataSetChanged();
+            /*MyDbcollectUtils.getInstance().dele();
+            List<GreenDaocollect> select2 = MyDbcollectUtils.getInstance().select();
+            seletlist.clear();
+            seletlist.addAll(select2);
+            likeAdapter.notifyDataSetChanged();*/
+        }
     }
     private ItemTouchHelpCallback.OnItemTouchCallbackListener onItemTouchCallbackListener = new ItemTouchHelpCallback.OnItemTouchCallbackListener() {
         @Override

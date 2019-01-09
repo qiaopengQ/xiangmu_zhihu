@@ -1,6 +1,5 @@
 package com.example.qiaop.xiangmu_zhihu;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,7 +20,7 @@ import com.example.qiaop.xiangmu_zhihu.fragment.CollectFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.datafragments.DataFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.GankFragments.GankFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.SettingFragment;
-import com.example.qiaop.xiangmu_zhihu.fragment.VtexFragment;
+import com.example.qiaop.xiangmu_zhihu.fragment.vtexfragments.VtexFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.WXFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.ZhiHuFragment;
 import com.example.qiaop.xiangmu_zhihu.fragment.imfragment.IMFragment;
@@ -29,8 +28,6 @@ import com.example.qiaop.xiangmu_zhihu.utils.MyDbBiaoshiUtils;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.List;
-
-import static com.example.qiaop.xiangmu_zhihu.R.drawable.back;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

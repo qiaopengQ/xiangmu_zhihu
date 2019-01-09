@@ -67,7 +67,7 @@ public class WXFragment extends BaseFragment<WecharView, WecharPresenter<WecharV
             public void Click(String url,String title,String image) {
                 //Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), TechDetailActivity.class);
-                intent.putExtra("name","微信精选");
+                intent.putExtra("name","来自微信精选");
                 intent.putExtra("url",url);
                 intent.putExtra("title",title);
                 intent.putExtra("image",image);
@@ -108,12 +108,6 @@ public class WXFragment extends BaseFragment<WecharView, WecharPresenter<WecharV
 
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-              /*  if (a == false) {
-                    wecharlist.clear();
-                    Initialize();
-                } else {
-                    SeekMap(q);
-                }*/
                 map.clear();
                 map.put("key", "52b7ec3471ac3bec6846577e79f20e4c");
                 map.put("num", "10");
@@ -176,10 +170,5 @@ public class WXFragment extends BaseFragment<WecharView, WecharPresenter<WecharV
         }else {
             wecharAdapter.setData(newslist);
         }
-        /*wecharlist.clear();
-        wecharlist.addAll(newslist);
-        Log.e("WXFragment", "a:" + a);
-        Log.e("数据", "newslist:" + newslist);
-        wecharAdapter.notifyDataSetChanged();*/
     }
 }

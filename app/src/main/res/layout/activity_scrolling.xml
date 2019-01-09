@@ -64,19 +64,19 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <!--<WebView
+            <WebView
                 android:id="@+id/web_spanned"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:isScrollContainer="false"
                 android:overScrollMode="never"
-                android:scrollbars="vertical"/>-->
-            <TextView
+                android:scrollbars="vertical"/>
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_spanned"
                 android:layout_margin="@dimen/text_margin"
-                />
+                />-->
         </FrameLayout>
     </android.support.v4.widget.NestedScrollView>
     <FrameLayout

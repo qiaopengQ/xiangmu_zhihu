@@ -57,7 +57,11 @@
             android:name=".activity.TechDetailActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.GankflActivity"
+        <activity
+            android:name=".activity.GankflActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".fragment.vtexfragments.activity.NodeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

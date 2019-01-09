@@ -1,6 +1,7 @@
-package com.example.qiaop.xiangmu_zhihu.fragment;
+package com.example.qiaop.xiangmu_zhihu.fragment.vtexfragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,16 +13,17 @@ import android.widget.ImageView;
 
 import com.example.qiaop.xiangmu_zhihu.R;
 import com.example.qiaop.xiangmu_zhihu.adapter.FragmentAdapter;
-import com.example.qiaop.xiangmu_zhihu.fragment.vtexfragments.VetxFragment;
+import com.example.qiaop.xiangmu_zhihu.fragment.vtexfragments.activity.NodeActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class VtexFragment extends Fragment {
+public class VtexFragment extends Fragment implements View.OnClickListener {
 
 
     private TabLayout tab_vtex;
@@ -29,6 +31,7 @@ public class VtexFragment extends Fragment {
     private ViewPager vp_vtex;
     private List<Fragment> fragments = new ArrayList<>();
     private List<String> strings = new ArrayList<>();
+    private List<String> list = new ArrayList<>();
 
     public VtexFragment() {
         // Required empty public constructor
@@ -47,7 +50,7 @@ public class VtexFragment extends Fragment {
         tab_vtex = (TabLayout) view.findViewById(R.id.tab_vtex);
         img_vtex = (ImageView) view.findViewById(R.id.img_vtex);
         vp_vtex = (ViewPager) view.findViewById(R.id.vp_vtex);
-
+        img_vtex.setOnClickListener(this);
         //"技术", "创意", "好玩", "Apple", "酷工作", "交易", "城市", "问与答", "最热", "全部", "R2"
         strings.add("技术");
         strings.add("创意");
@@ -59,11 +62,29 @@ public class VtexFragment extends Fragment {
         strings.add("最热");
         strings.add("全部");
         strings.add("R2");
+        //"tech", "creative", "play", "apple", "jobs", "deals", "city", "qna", "hot", "all", "r2"
+        list.add("tech");
+        list.add("creative");
+        list.add("play");
+        list.add("apple");
+        list.add("jobs");
+        list.add("deals");
+        list.add("city");
+        list.add("qna");
+        list.add("hot");
+        list.add("all");
+        list.add("r2");
         for (int i = 0; i < strings.size(); i++) {
-            fragments.add(new VetxFragment(strings.get(i)));
+            fragments.add(new V2exPageFragment(list.get(i)));
         }
         FragmentAdapter fragmentAdapter = new FragmentAdapter(getChildFragmentManager(),fragments,strings);
         vp_vtex.setAdapter(fragmentAdapter);
         tab_vtex.setupWithViewPager(vp_vtex);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getContext(), NodeActivity.class);
+        startActivity(intent);
     }
 }

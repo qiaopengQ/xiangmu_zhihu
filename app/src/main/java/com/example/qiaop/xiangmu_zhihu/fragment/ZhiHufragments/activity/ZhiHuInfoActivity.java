@@ -1,14 +1,12 @@
 package com.example.qiaop.xiangmu_zhihu.fragment.ZhiHufragments.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
@@ -24,14 +22,13 @@ import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaocollect;
 import com.example.qiaop.xiangmu_zhihu.beans.ZhihuDetailBean;
 import com.example.qiaop.xiangmu_zhihu.http.zhihu.ZhiHuRetrofit;
 import com.example.qiaop.xiangmu_zhihu.presenter.ZhiHuPresenter;
+import com.example.qiaop.xiangmu_zhihu.utils.HtmlUtil;
 import com.example.qiaop.xiangmu_zhihu.utils.MyDbcollectUtils;
 import com.example.qiaop.xiangmu_zhihu.view.ZhiHuView;
 import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.eventbus.EventBus;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,8 +46,7 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
     CollapsingToolbarLayout toolbarLayout;
     @BindView(R.id.app_bar)
     AppBarLayout appBar;
-    /*@BindView(R.id.web_spanned)
-    WebView web_spanned;*/
+
     @BindView(R.id.nsv_scroller)
     NestedScrollView nsvScroller;
     @BindView(R.id.tv_detail_bottom_like)
@@ -63,25 +59,29 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
     FrameLayout llDetailBottom;
     @BindView(R.id.fab_like)
     FloatingActionButton fabLike;
-    @BindView(R.id.tv_spanned)
-    TextView tvSpanned;
+    @BindView(R.id.web_spanned)
+    WebView webSpanned;
+    /*@BindView(R.id.tv_spanned)
+    TextView tvSpanned;*/
     private boolean isBottonShow = true;
     String mimeType = "text/html";
     String enCoding = "utf-8";
     private String title;
     private String image;
     private int data;
+    private Intent intent;
+    private List<GreenDaocollect> select;
 
     @Override
     protected void initData() {
 
-        Intent intent = getIntent();
+        intent = getIntent();
         data = intent.getIntExtra("data", 0);
         //Log.e("ZhiHuInfoActivity", newsid);
         HashMap<String, Object> map = new HashMap<>();
         map.put("newsid", data);
         presenter.getDailyListBean(ZhiHuRetrofit.NEWSIDINFO, map);
-        List<GreenDaocollect> select = MyDbcollectUtils.getInstance().select(data);
+        select = MyDbcollectUtils.getInstance().select(data);
         for (int i = 0; i < select.size(); i++) {
             boolean isCollect = select.get(i).getIsCollect();
             fabLike.setSelected(isCollect);
@@ -96,11 +96,14 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
                         .setAction("Action", null).show();*/
                 if (fabLike.isSelected()) {
                     fabLike.setSelected(false);
+                    List<GreenDaocollect> select = MyDbcollectUtils.getInstance().select(data);
+                    MyDbcollectUtils.getInstance().delete(select.get(0));
+                    EventBus.getDefault().postSticky("取消收藏");
                     Toast.makeText(ZhiHuInfoActivity.this, "取消", Toast.LENGTH_SHORT).show();
                     //mPresenter.deleteLikeData();
                 } else {
                     fabLike.setSelected(true);
-                    MyDbcollectUtils.getInstance().insert(new GreenDaocollect(null,title,data+"",image,"来自知乎",data,true));
+                    MyDbcollectUtils.getInstance().insert(new GreenDaocollect(null, title, data + "", image, "来自知乎", data, true));
                     Toast.makeText(ZhiHuInfoActivity.this, "收藏", Toast.LENGTH_SHORT).show();
                     //mPresenter.insertLikeData();
                 }
@@ -158,7 +161,8 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
                 setToolBar(toolbarDatainfo, title);
                 Glide.with(this).load(image).into(detailBarImage);
                 //web_spanned.loadDataWithBaseURL(null, body, mimeType, enCoding, null);
-                getHttp(zhihuDetailBean);
+                String htmlData = HtmlUtil.createHtmlData(zhihuDetailBean.getBody(), zhihuDetailBean.getCss(), zhihuDetailBean.getJs());
+                webSpanned.loadData(htmlData, HtmlUtil.MIME_TYPE, HtmlUtil.ENCODING);
                 break;
         }
     }
@@ -176,47 +180,6 @@ public class ZhiHuInfoActivity extends BaseActivity<ZhiHuView, ZhiHuPresenter<Zh
     @Override
     public void showError(String error) {
 
-    }
-
-    public void getHttp(final ZhihuDetailBean zhihuDetailBean) {
-        //耗时操作 所以搞个Thread出来
-        new Thread() {
-            @Override
-            public void run() {
-                Html.ImageGetter imageGetter = new Html.ImageGetter() {
-                    @Override
-                    public Drawable getDrawable(String source) {
-                        //source为 图片的url  注意:图片不能太大 否则也会加载不出来
-                        Drawable drawable = null;
-                        URL url;
-                        try {
-                            url = new URL(source);
-                            drawable = Drawable.createFromStream(url.openStream(), "jpg");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            return null;
-                        }
-                        //图片设置大小宽度 间距
-                        drawable.setBounds(0, 0, 200, 200);
-                        return drawable;
-                    }
-                };
-                //调用方法 Html 调用 放入图片加载器	//此参数为对象内需解析的html数据
-                final CharSequence spanned = Html.fromHtml(zhihuDetailBean.getBody(), imageGetter, null);
-                //切换线程修改
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //toolbarDatainfo.setTitle(spanned);
-                        if (spanned!=null){
-                            tvSpanned.setText(spanned);
-                        }
-
-                        //Log.e("spanned", "spanned:" + spanned);
-                    }
-                });
-            }
-        }.start();
     }
 
     @Override

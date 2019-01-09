@@ -2,9 +2,11 @@ package com.example.qiaop.xiangmu_zhihu.utils;
 
 import com.example.qiaop.xiangmu_zhihu.app.MyApp;
 import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaocollect;
+import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.Greendaolistbeans;
 import com.example.qiaop.xiangmu_zhihu.dao.DaoMaster;
 import com.example.qiaop.xiangmu_zhihu.dao.DaoSession;
 import com.example.qiaop.xiangmu_zhihu.dao.GreenDaocollectDao;
+import com.example.qiaop.xiangmu_zhihu.dao.GreendaolistbeansDao;
 
 import java.util.List;
 
@@ -53,5 +55,14 @@ public class MyDbcollectUtils {
     //条件查询数据库
     public  List<GreenDaocollect> select(int id) {
         return greenDaocollectDao.queryBuilder().where(GreenDaocollectDao.Properties.Dataid.eq(id)).list();
+    }
+
+    //条件删除
+    public void delete(GreenDaocollect greenDaocollect){
+        greenDaocollectDao.delete(greenDaocollect);
+    }
+    //条件查询数据库
+    public  List<GreenDaocollect> selecttitle(String title) {
+        return greenDaocollectDao.queryBuilder().where(GreenDaocollectDao.Properties.Title.eq(title)).list();
     }
 }

@@ -14,10 +14,10 @@ import com.example.qiaop.xiangmu_zhihu.R;
  * A simple {@link Fragment} subclass.
  */
 @SuppressLint("ValidFragment")
-public class VetxFragment extends Fragment {
+public class V2exPageFragment extends Fragment {
 
 
-    public VetxFragment(String s) {
+    public V2exPageFragment(String s) {
         // Required empty public constructor
     }
 

@@ -4,8 +4,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import com.example.qiaop.xiangmu_zhihu.base.activity.SimpleActivity;
 import com.example.qiaop.xiangmu_zhihu.beans.Greendaobeans.GreenDaocollect;
 import com.example.qiaop.xiangmu_zhihu.utils.MyDbcollectUtils;
 import com.google.gson.internal.bind.util.ISO8601Utils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,8 +52,22 @@ public class TechDetailActivity extends SimpleActivity {
         title = intent.getStringExtra("title");
         image = intent.getStringExtra("image");
         name = intent.getStringExtra("name");
-        if (title !=null){
-            setToolBar(toolbar, title);
+        List<GreenDaocollect> select = MyDbcollectUtils.getInstance().select();
+        Log.e("TechDetailActivity", "select:" + select);
+        if (select.size()>0){
+            List<GreenDaocollect> selecttitle = MyDbcollectUtils.getInstance().selecttitle(title);
+            if (selecttitle.get(0).getTitle().equals(title)){
+                isLiked=true;
+                Toast.makeText(this, "已收藏", Toast.LENGTH_SHORT).show();
+            }
+            Log.e("TechDetailActivity", "selecttitle:" + selecttitle);
+        }
+        /*if (title1.equals(title1)){
+            item.setIcon(R.mipmap.ic_toolbar_like_p);
+            isLiked = false;
+        }*/
+        if (this.title !=null){
+            setToolBar(toolbar, this.title);
         }
         wvTechContent.setWebViewClient(new WebViewClient());
         wvTechContent.setWebViewClient(new WebViewClient(){
@@ -76,7 +94,7 @@ public class TechDetailActivity extends SimpleActivity {
                 if(isLiked) {
                     item.setIcon(R.mipmap.ic_toolbar_like_p);
                     Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show();
-                    if (name.equals("微信精选")){
+                    if (name.equals("来自微信精选")){
                         MyDbcollectUtils.getInstance().insert(new GreenDaocollect(null,title,url,image,"来自微信精选",1,true));
                     }else if (name.equals("来自干货集中营_Android")){
                         MyDbcollectUtils.getInstance().insert(new GreenDaocollect(null,title,url,null,"来自干货集中营_Android",1,true));
@@ -88,6 +106,8 @@ public class TechDetailActivity extends SimpleActivity {
 
                     isLiked = false;
                 } else {
+                    List<GreenDaocollect> selecttitle = MyDbcollectUtils.getInstance().selecttitle(title);
+                    MyDbcollectUtils.getInstance().delete(selecttitle.get(0));
                     item.setIcon(R.mipmap.ic_toolbar_like_n);
                     isLiked = true;
                     Toast.makeText(this, "取消", Toast.LENGTH_SHORT).show();
